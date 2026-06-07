@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Dashboard</h2>
+
+<div class="row" style="margin-top:20px">
+    <div class="col-md-4">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                    Yesterday's Total Sales
+                </h4>
+            </div>
+            <div class="panel-body text-center">
+                <h2>&#8377;@ViewBag.YesterdaySales.ToString("N2")</h2>
+            </div>
+        </div>
+    </div>
+</div>
