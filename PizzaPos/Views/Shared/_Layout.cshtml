@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Pizza POS Management System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle"
+                        data-toggle="collapse" data-target="#empMenu">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Pizza POS", "Index", "Home",
+                    new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+
+            <div id="empMenu" class="navbar-collapse collapse">
+
+                <%-- Left nav links --%>
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Sales", "Index", "EmployeeSales")</li>
+                    <li>@Html.ActionLink("Orders", "GetOrders", "Orders")</li>
+                </ul>
+
+                <%-- Right: user info + logout --%>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="navbar-text">
+                        <span class="glyphicon glyphicon-briefcase"
+                              style="color:#5bc0de; margin-right:4px"></span>
+                        <span class="label label-info"
+                              style="font-size:11px; vertical-align:middle">
+                            EMPLOYEE
+                        </span>
+                    </li>
+                    <li class="navbar-text">
+                        <span class="glyphicon glyphicon-user"
+                              style="margin-right:4px"></span>
+                        <strong style="color:#fff">
+                            @(Session["UserName"] ?? User.Identity.Name)
+                        </strong>
+                    </li>
+                    <li>
+                        @Html.ActionLink("Logout", "Logout", "Account",
+                            null, new
+                            {
+                                @class = "btn btn-danger navbar-btn",
+                                style  = "margin-left:8px"
+                            })
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content" style="margin-top:70px">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p class="text-muted">
+                &copy; @DateTime.Now.Year - Pizza POS Management System
+                &nbsp;|&nbsp;
+                <small>
+                    Logged in as
+                    <strong>@(Session["UserName"] ?? User.Identity.Name)</strong>
+                    &nbsp;&mdash;&nbsp;
+                    <span class="text-info">Employee</span>
+                </small>
+            </p>
+        </footer>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
