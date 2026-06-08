@@ -1,0 +1,6 @@
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\bin\Release\MODELS.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\bin\Release\MODELS.pdb
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\obj\Release\MODELS.csprojAssemblyReference.cache
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\obj\Release\MODELS.csproj.CoreCompileInputs.cache
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\obj\Release\MODELS.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\obj\Release\MODELS.pdb

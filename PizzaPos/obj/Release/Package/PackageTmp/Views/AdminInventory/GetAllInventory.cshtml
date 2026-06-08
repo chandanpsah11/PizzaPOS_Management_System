@@ -1,0 +1,102 @@
+﻿@model List<MODELS.InventoryItemModel>
+@{
+    ViewBag.Title = "Inventory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+
+}
+
+<div class="text-center hidden-xs hidden-sm">
+    <div style="font-size:5rem; line-height:1;">🍕</div>
+</div>
+<h1 class="text-center" style="color:burlywood">Pizza Items Inventory Management</h1>
+<div class="container-fluid" style="margin-top:20px">
+    <div class="row" style="margin-bottom:12px">
+        <div class="col-xs-6">
+            <h3 style="margin:0">
+                <span class="glyphicon glyphicon-th-list"></span> Inventory
+            </h3>
+        </div>
+        <div class="col-xs-6 text-right">
+            <button class="btn btn-primary" onclick="openModal(0)">
+                <span class="glyphicon glyphicon-plus"></span> Add Item
+            </button>
+        </div>
+    </div>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @TempData["Error"]
+        </div>
+    }
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Item Name</th>
+                    <th>Current Stock</th>
+                    <th>Unit</th>
+                    <th>Last Restock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 1; }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(i++)</td>
+                        <td>@item.ItemName</td>
+                        <td>@item.CurrentStock</td>
+                        <td>@item.Unit</td>
+                        <td>@(item.LastAddedStockDate?.ToString("dd MMM yyyy") ?? "-")</td>
+                        <td>
+                            <button class="btn btn-xs btn-warning"
+                                    onclick="openModal(@item.itemid)">
+                                <span class="glyphicon glyphicon-pencil"></span> Edit
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="inventoryModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="modalTitle">Item</h4>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="text-center text-muted">Loading...</div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+    function openModal(id) {
+        $('#modalTitle').text(id === 0 ? 'Add Item' : 'Edit Item');
+        $('#modalBody').html('<div class="text-center text-muted" style="padding:20px">Loading...</div>');
+        $('#inventoryModal').modal('show');
+
+        $.get('@Url.Action("InventoryForm", "AdminInventory")', { id: id }, function (html) {
+            $('#modalBody').html(html);
+            $.validator.unobtrusive.parse('#modalBody');
+        });
+    }
+    </script>
+}

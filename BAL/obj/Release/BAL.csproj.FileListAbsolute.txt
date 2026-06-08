@@ -1,0 +1,13 @@
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Release\BAL.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Release\BAL.pdb
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Release\DAL.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Release\MODELS.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Release\DAL.pdb
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Release\DAL.dll.config
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Release\MODELS.pdb
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Release\EntityFramework.xml
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\obj\Release\BAL.csprojAssemblyReference.cache
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\obj\Release\BAL.csproj.CoreCompileInputs.cache
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\obj\Release\BAL.csproj.CopyComplete
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\obj\Release\BAL.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\obj\Release\BAL.pdb

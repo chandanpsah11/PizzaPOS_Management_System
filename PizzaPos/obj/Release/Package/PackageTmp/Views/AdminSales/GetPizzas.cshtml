@@ -1,0 +1,213 @@
+﻿@model IEnumerable<MODELS.PizzaMasterModel>
+@{
+    ViewBag.Title = "GetPizzas";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="text-center hidden-xs hidden-sm">
+    <div style="font-size:5rem; line-height:1;">🍕</div>
+</div>
+<h2 class="text-center" style="color:burlywood">Available Pizza List</h2>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="form-group">
+                <button type="button"
+                        class="btn btn-primary btn-block visible-xs-block"
+                        data-toggle="modal"
+                        data-target="#createPizzaModal">
+                    <span class="glyphicon glyphicon-plus"></span> Create Pizza
+                </button>
+                <button type="button"
+                        class="btn btn-primary hidden-xs"
+                        data-toggle="modal"
+                        data-target="#createPizzaModal">
+                    <span class="glyphicon glyphicon-plus"></span> Create Pizza
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="successMessage"
+                 class="alert alert-success"
+                 style="display:none">
+            </div>
+        </div>
+    </div>
+    <div class="row hidden-xs">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-1 col-md-1">@Html.DisplayNameFor(model => model.PizzaId)</th>
+                            <th class="col-sm-4 col-md-4">@Html.DisplayNameFor(model => model.PizzaName)</th>
+                            <th class="col-sm-4 col-md-4 hidden-sm">@Html.DisplayNameFor(model => model.CategoryName)</th>                   
+                            <th class="col-sm-2 col-md-2">@Html.DisplayNameFor(model => model.IsAvailable)</th>
+                            <th class="col-sm-2 col-md-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr class="pizza-row"
+                            data-url="@Url.Action("PizzaDetail", "AdminSales", new { id = item.PizzaId })"
+                            style="cursor:pointer">
+                            <td>@Html.DisplayFor(modelItem => item.PizzaId)</td>
+                            <td>@Html.DisplayFor(modelItem => item.PizzaName)</td>
+                            <td class="hidden-sm">@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                            <td>
+                                <button class="btn btn-xs @(item.IsAvailable ? "btn-success" : "btn-default")"
+                                        onclick="toggleAvailability(@item.PizzaId, event)">
+                                    @(item.IsAvailable ? "Available" : "Unavailable")
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-xs btn-danger"
+                                        onclick="deletePizza(@item.PizzaId, event)">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row visible-xs-block">
+        <div class="col-xs-12">
+            @foreach (var item in Model)
+            {
+                <div class="panel panel-default pizza-row"
+                     data-url="@Url.Action("PizzaDetail", "AdminSales", new { id = item.PizzaId })"
+                     style="cursor:pointer">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <h4 class="panel-title">
+                                    <strong>@Html.DisplayFor(modelItem => item.PizzaName)</strong>
+                                </h4>
+                                <p class="text-muted small">
+                                    <span class="glyphicon glyphicon-tag"></span>
+                                    @Html.DisplayFor(modelItem => item.CategoryName)
+                                </p>
+                            </div>
+                            <div class="col-xs-4 text-right">
+                                @if (item.IsAvailable)
+                                {
+                                    <span class="label label-success">Available</span>
+                                }
+                                else
+                                {
+                                    <span class="label label-danger">Unavailable </span>
+                                }
+                                <br />
+                                <small class="text-muted">#@Html.DisplayFor(modelItem => item.PizzaId)</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <span class="text-primary small">
+                                    Tap to view details
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade"
+     id="createPizzaModal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="createPizzaModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="createPizzaModalLabel">
+                    <span class="glyphicon glyphicon-cutlery"></span> Create Pizza
+                </h4>
+            </div>
+            <div class="modal-body" id="createPizzaContainer">
+                @{ Html.RenderAction("CreatePizza", "AdminSales"); }
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-default btn-block visible-xs-block"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button"
+                        class="btn btn-default hidden-xs"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    <script>
+        $(document).ready(function () {
+            $('.pizza-row').on('click', function () {
+                window.location.href = $(this).data('url');
+            });
+        });
+
+        function onPizzaSaved(result) {
+            if (result.success) {
+                $('#successMessage')
+                    .html(result.message)
+                    .show();
+                $('#createPizzaModal').modal('hide');
+                setTimeout(function () {
+                    $('#successMessage').fadeOut('slow');
+                }, 5000);
+            }
+        }
+        function toggleAvailability(pizzaId, e) {
+    e.stopPropagation();
+    if (!confirm('Toggle availability for this pizza?')) return;
+    $.ajax({
+        url:  '@Url.Action("TogglePizzaAvailability", "AdminSales")',
+        type: 'POST',
+        data: { id: pizzaId },
+        success: function (res) {
+            if (res.success) location.reload();
+            else alert('Failed to update availability.');
+        }
+    });
+}
+
+function deletePizza(pizzaId, e) {
+    e.stopPropagation();
+    if (!confirm('Delete this pizza? It will be hidden from all screens.')) return;
+    $.ajax({
+        url:  '@Url.Action("SoftDeletePizza", "AdminSales")',
+        type: 'POST',
+        data: { id: pizzaId },
+        success: function (res) {
+            if (res.success) location.reload();
+            else alert('Failed to delete pizza.');
+        }
+    });
+}
+    </script>
+}

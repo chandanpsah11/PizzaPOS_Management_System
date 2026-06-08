@@ -1,0 +1,12 @@
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Debug\BAL.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Debug\BAL.pdb
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Debug\DAL.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Debug\MODELS.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Debug\DAL.pdb
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Debug\DAL.dll.config
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\bin\Debug\MODELS.pdb
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\obj\Debug\BAL.csprojAssemblyReference.cache
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\obj\Debug\BAL.csproj.CoreCompileInputs.cache
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\obj\Debug\BAL.csproj.CopyComplete
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\obj\Debug\BAL.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\BAL\obj\Debug\BAL.pdb

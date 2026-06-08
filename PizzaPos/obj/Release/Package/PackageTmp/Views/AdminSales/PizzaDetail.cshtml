@@ -1,0 +1,302 @@
+﻿@model MODELS.PizzaDetailViewModel
+@{
+    ViewBag.Title = Model.PizzaName + " - Detail";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container" style="margin-top:20px">
+
+    <div class="page-header">
+        <h3>
+            @Model.PizzaName
+            <small class="text-muted"> - @Model.CategoryName</small>
+        </h3>
+
+        @Html.ActionLink("Back", "GetPizzas", "AdminSales",
+            null, new { @class = "btn btn-default btn-sm" })
+    </div>
+
+    <div id="pageSuccess" class="alert alert-success" style="display:none"></div>
+    <div id="pageError" class="alert alert-danger" style="display:none"></div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">Price by Size</div>
+
+        <div class="panel-body">
+            <div class="row">
+
+                <div class="col-sm-4 col-xs-12">
+                    <label>Size</label>
+                    @Html.DropDownList("ddlSize",
+                        ViewBag.Sizes as SelectList,
+                        "-- Select Size --",
+                        new { @class = "form-control", id = "ddlSize" })
+                </div>
+
+                <div class="col-sm-4 col-xs-12">
+                    <label>Price (Rs)</label>
+                    <input type="number" id="txtPrice"
+                           class="form-control" />
+                </div>
+
+                <div class="col-sm-4 col-xs-12" style="margin-top:25px;">
+                    <button class="btn btn-success btn-block"
+                            onclick="savePrice()">
+                        Save Price
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-warning">
+        <div class="panel-heading">Recipe</div>
+
+        <div class="panel-body">
+
+            <div id="recipeInputArea">
+                <div class="row">
+
+                    <div class="col-sm-3 col-xs-12">
+                        <label>Ingredient</label>
+                        @Html.DropDownList("ddlIngredient",
+                            ViewBag.Inventory as SelectList,
+                            "-- Select Item --",
+                            new { @class = "form-control", id = "ddlIngredient" })
+                    </div>
+
+                    <div class="col-sm-3 col-xs-12">
+                        <label>Quantity</label>
+                        <input type="number" id="txtQty"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-sm-3 col-xs-12">
+                        <label>Unit</label>
+                        @Html.DropDownList("ddlUOM",
+                            ViewBag.UOMs as SelectList,
+                            "-- Select Unit --",
+                            new { @class = "form-control", id = "ddlUOM" })
+                    </div>
+
+                    <div class="col-sm-3 col-xs-12" style="margin-top:25px;">
+                        <button class="btn btn-warning btn-block"
+                                onclick="addRecipeItem()">
+                            Add
+                        </button>
+                    </div>
+
+                </div>
+                <div class="table-responsive" style="margin-top:15px">
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Ingredient</th>
+                                <th>Qty</th>
+                                <th>Unit</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recipeTable">
+                            <tr id="recipeEmptyRow">
+                                <td colspan="4" class="text-center">
+                                    No ingredients added
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <button class="btn btn-primary btn-block"
+                        onclick="saveRecipe()">
+                    Save Recipe
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+    var pizzaId     = @Model.PizzaId;
+    var recipeItems = [];
+
+    function showSuccess(msg) {
+        $('#pageSuccess').html(msg).show();
+        setTimeout(function () { $('#pageSuccess').fadeOut('slow'); }, 5000);
+    }
+    function showError(msg) {
+        $('#pageError').html(msg).show();
+        setTimeout(function () { $('#pageError').fadeOut('slow'); }, 5000);
+    }
+
+    $(document).ready(function () {
+        $('#ddlSize').on('change', function () {
+            var sizeId   = $(this).val();
+            var sizeName = $(this).find('option:selected').text();
+
+            recipeItems = [];
+            $('#recipeTable tr:not(#recipeEmptyRow)').remove();
+            $('#recipeEmptyRow').show();
+            $('#txtPrice').val('');
+            $('#existingPriceNote').hide();
+
+            if (!sizeId) {
+                $('#recipeSizeLabel')
+                    .text('No size selected')
+                    .removeClass('label-primary')
+                    .addClass('label-default');
+                $('#recipeSizeWarning').show();
+                $('#recipeInputArea').hide();
+                return;
+            }
+            $('#recipeSizeLabel')
+                .text(sizeName)
+                .removeClass('label-default')
+                .addClass('label-primary');
+            $.ajax({
+                url:  '@Url.Action("GetSizeData", "AdminSales")',
+                type: 'GET',
+                data: { pizzaId: pizzaId, pizzaSizeId: parseInt(sizeId) },
+                success: function (res) {
+                    if (!res.success) { showError('Failed to load size data.'); return; }
+
+                    if (res.price !== null && res.price !== undefined) {
+                        $('#txtPrice').val(res.price);
+                        $('#existingPriceNote').show();
+                    }
+                    if (res.recipe && res.recipe.length > 0) {
+                        $('#recipeEmptyRow').hide();
+                        $.each(res.recipe, function (i, r) {
+                            recipeItems.push({
+                                itemId:   r.ItemId,
+                                itemName: r.ItemName,
+                                qty:      r.QuantityRequired,
+                                unitId:   r.UnitId,
+                                unitName: r.UnitName
+                            });
+                            appendRecipeRow(r.ItemId, r.ItemName,
+                                            r.QuantityRequired,
+                                            r.UnitName);
+                        });
+                    }
+
+                    $('#recipeSizeWarning').hide();
+                    $('#recipeInputArea').show();
+                },
+                error: function () { showError('Server error loading size data.'); }
+            });
+        });
+    });
+
+    function appendRecipeRow(id, name, qty, unitName) {
+        $('#recipeTable').append(
+            '<tr id="recipe_' + id + '">' +
+            '<td>' + name     + '</td>' +
+            '<td>' + qty      + '</td>' +
+            '<td>' + unitName + '</td>' +
+            '<td>' +
+            '  <button class="btn btn-danger btn-xs" ' +
+            '          onclick="removeRecipeItem(\'' + id + '\')">' +
+            '    Remove' +
+            '  </button>' +
+            '</td>' +
+            '</tr>'
+        );
+    }
+
+    function savePrice() {
+        var sizeId = $('#ddlSize').val();
+        var price  = $('#txtPrice').val();
+
+        if (!sizeId)              { showError('Please select a size.');        return; }
+        if (!price || price <= 0) { showError('Please enter a valid price.');  return; }
+
+        $.ajax({
+            url:         '@Url.Action("SavePizzaPrice", "AdminSales")',
+            type:        'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                PizzaId:     pizzaId,
+                PizzaSizeId: parseInt(sizeId),
+                Price:       parseFloat(price)
+            }),
+            success: function (res) {
+                if (res.success) {
+                    showSuccess('Price saved for selected size.');
+                    $('#existingPriceNote').show();
+                } else {
+                    showError('Failed to save price.');
+                }
+            },
+            error: function () { showError('Server error saving price.'); }
+        });
+    }
+    function addRecipeItem() {
+        var itemDd   = $('#ddlIngredient');
+        var uomDd    = $('#ddlUOM');
+        var id       = itemDd.val();
+        var name     = itemDd.find('option:selected').text();
+        var qty      = parseFloat($('#txtQty').val());
+        var unitId   = uomDd.val();
+        var unitName = uomDd.find('option:selected').text();
+
+        if (!id)              { showError('Please select an ingredient.');   return; }
+        if (!qty || qty <= 0) { showError('Please enter a valid quantity.'); return; }
+        if (!unitId)          { showError('Please select a unit.');          return; }
+
+        var exists = recipeItems.some(function (r) { return r.itemId == id; });
+        if (exists) { showError('Ingredient already added.'); return; }
+
+        recipeItems.push({
+            itemId: id, itemName: name,
+            qty: qty, unitId: unitId, unitName: unitName
+        });
+        $('#recipeEmptyRow').hide();
+        appendRecipeRow(id, name, qty, unitName);
+
+        itemDd.val('');
+        uomDd.val('');
+        $('#txtQty').val('');
+    }
+
+    function removeRecipeItem(id) {
+        recipeItems = recipeItems.filter(function (r) { return r.itemId != id; });
+        $('#recipe_' + id).remove();
+        if (recipeItems.length === 0) $('#recipeEmptyRow').show();
+    }
+    function saveRecipe() {
+        var sizeId = $('#ddlSize').val();
+        if (!sizeId)                  { showError('Please select a size in Section 1.'); return; }
+        if (recipeItems.length === 0) { showError('Please add at least one ingredient.'); return; }
+
+        var payload = recipeItems.map(function (r) {
+            return {
+                PizzaId:          pizzaId,
+                PizzaSizeId:      parseInt(sizeId),
+                ItemId:           parseInt(r.itemId),
+                QuantityRequired: r.qty,
+                UnitId:           parseInt(r.unitId)
+            };
+        });
+
+        $.ajax({
+            url:         '@Url.Action("SaveRecipe", "AdminSales")',
+            type:        'POST',
+            contentType: 'application/json',
+            data:        JSON.stringify(payload),
+            success: function (res) {
+                if (res.success) {
+                    showSuccess('Recipe saved successfully!');
+                } else {
+                    showError('Failed to save recipe.');
+                }
+            },
+            error: function () { showError('Server error saving recipe.'); }
+        });
+    }
+    </script>
+}

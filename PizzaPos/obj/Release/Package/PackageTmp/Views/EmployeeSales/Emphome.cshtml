@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Emphome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    TimeZoneInfo ist = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+    DateTime now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, ist);
+
+    string greeting;
+    if (now.Hour < 12)
+    {
+        greeting = "Good Morning";
+    }
+    else if (now.Hour < 17)
+    {
+        greeting = "Good Afternoon";
+    }
+    else
+    {
+        greeting = "Good Evening";
+    }
+}
+<div class="text-center">
+    <h1 style="color:burlywood">@greeting 🍕</h1>
+    <h4 style="color:burlywood">
+        It's @now.ToString("hh:mm tt") now — @now.ToString("dddd, dd MMMM yyyy")
+    </h4>
+</div>

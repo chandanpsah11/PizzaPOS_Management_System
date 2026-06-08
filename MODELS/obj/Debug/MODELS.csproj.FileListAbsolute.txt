@@ -1,0 +1,5 @@
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\bin\Debug\MODELS.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\bin\Debug\MODELS.pdb
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\obj\Debug\MODELS.csproj.CoreCompileInputs.cache
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\obj\Debug\MODELS.dll
+C:\Users\hp\OneDrive\Desktop\Pizzapos\PizzaPos\MODELS\obj\Debug\MODELS.pdb
